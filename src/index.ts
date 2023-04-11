@@ -1,5 +1,6 @@
 import express, { Router } from "express";
 import { json } from "body-parser";
+import ServerlessHttp from "serverless-http";
 
 const app = express();
 app.use(json());
@@ -11,12 +12,14 @@ app.listen(PORT, () => {
 
 const router = Router();
 
-router.get("/api/welcome", (req, res) => {
+router.get("/welcome", (req, res) => {
   return res.send("welcome");
 });
 
-router.get("/api/todo", (req, res) => {
+router.get("/todo", (req, res) => {
   return res.send("the todo");
 });
 
-app.use(router);
+app.use("/.netlify/functions/index", router);
+
+export const handler = ServerlessHttp(app);
